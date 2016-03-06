@@ -1,0 +1,20 @@
+{
+    "name": "pst",
+    "description": "A command line program for generating stats through pipes.",
+    "authors": ["Cornelius Sybrandy"],
+    "targetType": "executable",
+    "targetPath": "bin",
+    "configurations": [
+        {
+            "name": "unittest",
+            "preBuildCommands": [
+                "dub run unit-threaded -c gen_ut_main -- -f bin/ut.d"
+            ],
+            "mainSourceFile": "bin/ut.d",
+            "excludedSourceFiles": ["source/app.d"],
+            "dependencies": {
+                "unit-threaded": "~>0.6.3"
+            }
+        }
+    ]
+}
