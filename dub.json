@@ -5,6 +5,7 @@
     "targetType": "executable",
     "targetPath": "bin",
     "configurations": [
+        { "name": "executable" },
         {
             "name": "unittest",
             "preBuildCommands": [
