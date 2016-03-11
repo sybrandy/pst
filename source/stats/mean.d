@@ -46,110 +46,22 @@ struct Mean(T)
     }
 }
 
-@("Very simple test case (int)")
-unittest
+@Types!(short, int, long, float, double)
+void testVerySimpleCase(T)()
 {
-    Mean!int intMean;
-    intMean.add(1);
-    intMean.add(1);
-    intMean.add(1);
-    intMean.flush.shouldEqual(1);
+    Mean!T mean;
+    mean.add(1);
+    mean.add(1);
+    mean.add(1);
+    mean.flush.shouldEqual(1);
 }
 
-@("Simple test case (int)")
-unittest
+@Types!(short, int, long, float, double)
+void testSimpleCase(T)()
 {
-    Mean!int intMean;
-    intMean.add(1);
-    intMean.add(2);
-    intMean.add(3);
-    intMean.flush.shouldEqual(2);
-}
-
-@("Very simple test case (long)")
-unittest
-{
-    Mean!long longMean;
-    longMean.add(1);
-    longMean.add(1);
-    longMean.add(1);
-    longMean.flush.shouldEqual(1);
-}
-
-@("Simple test case (long)")
-unittest
-{
-    Mean!long longMean;
-    longMean.add(1);
-    longMean.add(2);
-    longMean.add(3);
-    longMean.flush.shouldEqual(2);
-}
-
-@("Very simple test case (ushort)")
-unittest
-{
-    Mean!ushort ushortMean;
-    ushortMean.add(1);
-    ushortMean.add(1);
-    ushortMean.add(1);
-    ushortMean.flush.shouldEqual(1);
-}
-
-@("Simple test case (ushort)")
-unittest
-{
-    Mean!ushort ushortMean;
-    ushortMean.add(1);
-    ushortMean.add(2);
-    ushortMean.add(3);
-    ushortMean.flush.shouldEqual(2);
-}
-
-@("Very simple test case (float)")
-unittest
-{
-    Mean!float floatMean;
-    floatMean.add(1.0);
-    floatMean.add(1.0);
-    floatMean.add(1.0);
-    floatMean.total.shouldEqual(3.0);
-    floatMean.numVals.shouldEqual(3.0);
-    floatMean.flush.shouldEqual(1.0);
-}
-
-@("Simple test case (float)")
-unittest
-{
-    Mean!float floatMean;
-    floatMean.add(1.0);
-    floatMean.add(2.0);
-    floatMean.add(3.0);
-    floatMean.total.shouldEqual(6.0);
-    floatMean.numVals.shouldEqual(3.0);
-    floatMean.flush.shouldEqual(2.0);
-}
-
-@("Very simple test case (double)")
-unittest
-{
-    Mean!double doubleMean;
-    doubleMean.add(1.0);
-    doubleMean.add(1.0);
-    doubleMean.add(1.0);
-    doubleMean.total.shouldEqual(3.0);
-    doubleMean.numVals.shouldEqual(3.0);
-    doubleMean.flush.shouldEqual(1.0);
-}
-
-@("Simple test case (double)")
-unittest
-{
-    Mean!double doubleMean;
-    doubleMean.add(1.0);
-    doubleMean.add(2.0);
-    doubleMean.add(3.0);
-    doubleMean.total.shouldEqual(6.0);
-    doubleMean.numVals.shouldEqual(3.0);
-    doubleMean.flush.shouldEqual(2.0);
+    Mean!T mean;
+    mean.add(1);
+    mean.add(2);
+    mean.add(3);
+    mean.flush.shouldEqual(2);
 }
