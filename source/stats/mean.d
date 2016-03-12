@@ -1,12 +1,14 @@
 module stats.mean;
 
 import std.stdio, std.traits, std.math, std.conv;
+import stats;
+
 version(unittest)
 {
     import unit_threaded;
 }
 
-struct Mean(T)
+class Mean(T) : Stats!(T)
 {
     static if (isFloatingPoint!(T))
     {
@@ -49,7 +51,7 @@ struct Mean(T)
 @Types!(short, int, long, float, double)
 void testVerySimpleCase(T)()
 {
-    Mean!T mean;
+    Stats!T mean = initStats!(T)("mean");
     mean.add(1);
     mean.add(1);
     mean.add(1);
@@ -59,7 +61,7 @@ void testVerySimpleCase(T)()
 @Types!(short, int, long, float, double)
 void testSimpleCase(T)()
 {
-    Mean!T mean;
+    Stats!T mean = initStats!(T)("mean");
     mean.add(1);
     mean.add(2);
     mean.add(3);
