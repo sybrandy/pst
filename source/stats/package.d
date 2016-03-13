@@ -1,5 +1,6 @@
 module stats;
 
+import std.uni;
 import stats.mean;
 
 interface Stats(T)
@@ -10,6 +11,7 @@ interface Stats(T)
 
 Stats!(T) initStats(T)(string name)
 {
+    name = name.toLower;
     if (name == "mean")
     {
         return new Mean!(T)();

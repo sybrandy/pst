@@ -61,7 +61,7 @@ void testVerySimpleCase(T)()
 @Types!(short, int, long, float, double)
 void testSimpleCase(T)()
 {
-    Stats!T mean = initStats!(T)("mean");
+    Stats!T mean = initStats!(T)("MEAN");
     mean.add(1);
     mean.add(2);
     mean.add(3);
