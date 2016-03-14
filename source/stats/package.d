@@ -6,7 +6,8 @@ import stats.mean;
 interface Stats(T)
 {
     void add(T val);
-    T flush();
+    void finish();
+    string toString();
 }
 
 Stats!(T) initStats(T)(string name)

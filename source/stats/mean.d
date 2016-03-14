@@ -1,6 +1,6 @@
 module stats.mean;
 
-import std.stdio, std.traits, std.math, std.conv;
+import std.stdio, std.traits, std.math, std.conv, std.format;
 import stats;
 
 version(unittest)
@@ -29,6 +29,8 @@ class Mean(T) : Stats!(T)
         }
     }
     ulong numVals;
+    T result;
+
     void add(T val)
     {
         static if (isFloatingPoint!(T))
@@ -42,9 +44,21 @@ class Mean(T) : Stats!(T)
         numVals++;
     }
 
-    T flush()
+    void finish()
     {
-        return to!(T)(total / numVals);
+        result = to!(T)(total / numVals);
+    }
+
+    override string toString()
+    {
+        static if (isFloatingPoint!(T))
+        {
+            return format("MEAN: %.4f", result);
+        }
+        else
+        {
+            return format("MEAN: %d", result);
+        }
     }
 }
 
@@ -55,7 +69,15 @@ void testVerySimpleCase(T)()
     mean.add(1);
     mean.add(1);
     mean.add(1);
-    mean.flush.shouldEqual(1);
+    mean.finish();
+    static if (isFloatingPoint!(T))
+    {
+        mean.toString().shouldEqual("MEAN: 1.0000");
+    }
+    else
+    {
+        mean.toString().shouldEqual("MEAN: 1");
+    }
 }
 
 @Types!(short, int, long, float, double)
@@ -65,5 +87,13 @@ void testSimpleCase(T)()
     mean.add(1);
     mean.add(2);
     mean.add(3);
-    mean.flush.shouldEqual(2);
+    mean.finish();
+    static if (isFloatingPoint!(T))
+    {
+        mean.toString().shouldEqual("MEAN: 2.0000");
+    }
+    else
+    {
+        mean.toString().shouldEqual("MEAN: 2");
+    }
 }
