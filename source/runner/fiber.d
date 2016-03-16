@@ -1,6 +1,6 @@
 module runner.fiber;
 
-import std.range.primitives;
+import std.range.primitives, core.thread, std.functional, std.array, std.stdio;
 import stats;
 
 version(unittest)
@@ -10,14 +10,51 @@ version(unittest)
 
 struct FiberRunner(T)
 {
-    Stats!T[] stats;
+    Fiber[] stats;
+    bool isDone = false;
+    T currValue;
+    string[] output;
+
     void addMetric(string name)
     {
-        stats ~= initStats!(T)(name);
+        auto newStat = initStats!(T)(name);
+        alias partial!(fiberFunc, newStat) newFunc;
+        stats ~= new Fiber(&newFunc);
     }
-    /* void put(FiberRunner f, T value) */
-    /* { */
-    /* } */
+
+    void put(T value)
+    {
+        this.currValue = value;
+        foreach (s; this.stats)
+        {
+            s.call();
+        }
+    }
+
+    void fiberFunc(Stats!(T) stat)
+    {
+        while (!isDone)
+        {
+            stat.add(this.currValue);
+            Fiber.yield();
+        }
+        stat.finish();
+        this.output ~= stat.toString();
+    }
+
+    void finish()
+    {
+        this.isDone = true;
+        foreach (s; this.stats)
+        {
+            s.call();
+        }
+    }
+
+    string getOutput()
+    {
+        return output.join("\n");
+    }
 }
 
 @(1, 2, 5)
@@ -30,4 +67,17 @@ void testAddStat(int numMetrics)
         fr.addMetric("mean");
     }
     fr.stats.length.shouldEqual(numMetrics);
+}
+
+@("Test Fiber Mean Only")
+unittest
+{
+    FiberRunner!int fr;
+
+    fr.addMetric("mean");
+    fr.put(3);
+    fr.put(4);
+    fr.put(5);
+    fr.finish();
+    fr.getOutput.shouldEqual("MEAN: 4");
 }
