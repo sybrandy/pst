@@ -57,27 +57,30 @@ struct FiberRunner(T)
     }
 }
 
-@(1, 2, 5)
-void testAddStat(int numMetrics)
+version(unittest)
 {
-    FiberRunner!int fr;
-
-    for (int i = 0; i < numMetrics; i++)
+    @(1, 2, 5)
+    void testAddStat(int numMetrics)
     {
-        fr.addMetric("mean");
+        FiberRunner!int fr;
+
+        for (int i = 0; i < numMetrics; i++)
+        {
+            fr.addMetric("mean");
+        }
+        fr.stats.length.shouldEqual(numMetrics);
     }
-    fr.stats.length.shouldEqual(numMetrics);
-}
 
-@("Test Fiber Mean Only")
-unittest
-{
-    FiberRunner!int fr;
+    @("Test Fiber Mean Only")
+    unittest
+    {
+        FiberRunner!int fr;
 
-    fr.addMetric("mean");
-    fr.put(3);
-    fr.put(4);
-    fr.put(5);
-    fr.finish();
-    fr.getOutput.shouldEqual("MEAN: 4");
+        fr.addMetric("mean");
+        fr.put(3);
+        fr.put(4);
+        fr.put(5);
+        fr.finish();
+        fr.getOutput.shouldEqual("MEAN: 4");
+    }
 }

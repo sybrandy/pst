@@ -62,38 +62,41 @@ class Mean(T) : Stats!(T)
     }
 }
 
-@Types!(short, int, long, float, double)
-void testVerySimpleCase(T)()
+version(unittest)
 {
-    Stats!T mean = initStats!(T)("mean");
-    mean.add(1);
-    mean.add(1);
-    mean.add(1);
-    mean.finish();
-    static if (isFloatingPoint!(T))
+    @Types!(short, int, long, float, double)
+    void testVerySimpleCase(T)()
     {
-        mean.toString().shouldEqual("MEAN: 1.0000");
+        Stats!T mean = initStats!(T)("mean");
+        mean.add(1);
+        mean.add(1);
+        mean.add(1);
+        mean.finish();
+        static if (isFloatingPoint!(T))
+        {
+            mean.toString().shouldEqual("MEAN: 1.0000");
+        }
+        else
+        {
+            mean.toString().shouldEqual("MEAN: 1");
+        }
     }
-    else
-    {
-        mean.toString().shouldEqual("MEAN: 1");
-    }
-}
 
-@Types!(short, int, long, float, double)
-void testSimpleCase(T)()
-{
-    Stats!T mean = initStats!(T)("MEAN");
-    mean.add(1);
-    mean.add(2);
-    mean.add(3);
-    mean.finish();
-    static if (isFloatingPoint!(T))
+    @Types!(short, int, long, float, double)
+    void testSimpleCase(T)()
     {
-        mean.toString().shouldEqual("MEAN: 2.0000");
-    }
-    else
-    {
-        mean.toString().shouldEqual("MEAN: 2");
+        Stats!T mean = initStats!(T)("MEAN");
+        mean.add(1);
+        mean.add(2);
+        mean.add(3);
+        mean.finish();
+        static if (isFloatingPoint!(T))
+        {
+            mean.toString().shouldEqual("MEAN: 2.0000");
+        }
+        else
+        {
+            mean.toString().shouldEqual("MEAN: 2");
+        }
     }
 }
