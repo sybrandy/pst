@@ -1,14 +1,14 @@
 module runner.fiber;
 
 import std.range.primitives, core.thread, std.functional, std.array, std.stdio;
-import stats;
+import stats, runner;
 
 version(unittest)
 {
     import unit_threaded;
 }
 
-struct FiberRunner(T)
+class FiberRunner(T): Runner!(T)
 {
     Fiber[] stats;
     bool isDone = false;
@@ -62,7 +62,7 @@ version(unittest)
     @(1, 2, 5)
     void testAddStat(int numMetrics)
     {
-        FiberRunner!int fr;
+        FiberRunner!int fr = new FiberRunner!int();
 
         for (int i = 0; i < numMetrics; i++)
         {
@@ -74,7 +74,7 @@ version(unittest)
     @("Test Fiber Mean Only")
     unittest
     {
-        FiberRunner!int fr;
+        FiberRunner!int fr = new FiberRunner!int();
 
         fr.addMetric("mean");
         fr.put(3);
