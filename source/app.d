@@ -1,5 +1,5 @@
 import std.array, std.algorithm, std.getopt, std.stdio, std.string, std.conv;
-import runner.fiber;
+import runner, runner.fiber;
 
 struct Options
 {
@@ -11,27 +11,41 @@ struct Options
 int main(string[] args)
 {
     Options opts = getOptions(args);
-    bool isFloat = false;
+    Runner!(double) runner;
 
     if (opts.stats.length == 0)
     {
         writeln("You must specify at least one stat to calculate.");
         return 1;
     }
+
+    if (opts.threads == 0)
+    {
+        runner = new FiberRunner!(double);
+    }
+    else
+    {
+        // Instantiate a threaded runner here.
+    }
+    foreach (s; opts.stats)
+    {
+        runner.addMetric(s);
+    }
     foreach (string line; stdin.byLineCopy)
     {
+        if (line.length == 0)
+        {
+            break;
+        }
         if (!isNumeric(line))
         {
             writeln("The value must be a number.");
             return 1;
         }
-        else if (indexOf(line, '.') > -1)
-        {
-            isFloat = true;
-        }
-        writeln("Line: ", line);
-        writeln("Is a float: ", isFloat);
+        runner.put(to!(double)(line));
     }
+    runner.finish();
+    writeln("Result:\n", runner.getOutput);
     return 0;
 }
 
