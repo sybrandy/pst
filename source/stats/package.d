@@ -1,7 +1,7 @@
 module stats;
 
-import std.uni;
-import stats.mean, stats.median;
+import std.uni: toLower;
+import stats.mean, stats.median, stats.mode;
 
 interface Stats(T)
 {
@@ -18,6 +18,8 @@ Stats!(T) initStats(T)(string name)
             return new Mean!(T)();
         case "median": 
             return new Median!(T)();
+        case "mode": 
+            return new Mode!(T)();
     }
     assert(0);
 }
