@@ -7,7 +7,7 @@ one or more statistical measures to STDOUT.  For example, if you have a log
 for a web service and you want to know the average and maximum request times,
 you can do something like this:
 
-    grep REQ_TIME /var/log/myservice.log | awk '{print $NF}' | pst --stats=avg,max
+    grep REQ_TIME /var/log/myservice.log | awk '{print $NF}' | pst --stats=mean,max
 
 For larger workloads this will support using multiple threads to allow
 multiple measures to be calculated concurrently.  This will be explicitly
