@@ -1,7 +1,7 @@
 module stats;
 
 import std.uni: toLower;
-import stats.mean, stats.median, stats.mode;
+import stats.mean, stats.median, stats.mode, stats.count;
 
 interface Stats(T)
 {
@@ -14,6 +14,8 @@ Stats!(T) initStats(T)(string name)
 {
     final switch (name.toLower)
     {
+        case "count": 
+            return new Count!(T)();
         case "mean": 
             return new Mean!(T)();
         case "median": 
