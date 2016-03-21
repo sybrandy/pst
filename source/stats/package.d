@@ -2,7 +2,7 @@ module stats;
 
 import std.uni: toLower;
 import stats.mean, stats.median, stats.mode, stats.count, stats.sum,
-       stats.stddev;
+       stats.stddev, stats.range;
 
 interface Stats(T)
 {
@@ -27,6 +27,8 @@ Stats!(T) initStats(T)(string name)
             return new Mode!(T)();
         case "stddev": 
             return new Stddev!(T)();
+        case "range": 
+            return new Range!(T)();
     }
     assert(0);
 }
