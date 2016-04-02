@@ -2,7 +2,7 @@ module stats;
 
 import std.uni: toLower;
 import stats.mean, stats.median, stats.mode, stats.count, stats.sum,
-       stats.stddev, stats.range;
+       stats.stddev, stats.range, stats.percentiles;
 import common.options;
 
 interface Stats(T)
@@ -30,6 +30,8 @@ Stats!(T) initStats(T)(string name, Options opts)
             return new Stddev!(T)(opts);
         case "range": 
             return new Range!(T)(opts);
+        case "percentiles": 
+            return new Percentiles!(T)(opts);
     }
     assert(0);
 }
