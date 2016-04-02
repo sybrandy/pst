@@ -3,6 +3,7 @@ module stats;
 import std.uni: toLower;
 import stats.mean, stats.median, stats.mode, stats.count, stats.sum,
        stats.stddev, stats.range;
+import common.options;
 
 interface Stats(T)
 {
@@ -11,24 +12,24 @@ interface Stats(T)
     string toString();
 }
 
-Stats!(T) initStats(T)(string name)
+Stats!(T) initStats(T)(string name, Options opts)
 {
     final switch (name.toLower)
     {
         case "count": 
-            return new Count!(T)();
+            return new Count!(T)(opts);
         case "sum": 
-            return new Sum!(T)();
+            return new Sum!(T)(opts);
         case "mean": 
-            return new Mean!(T)();
+            return new Mean!(T)(opts);
         case "median": 
-            return new Median!(T)();
+            return new Median!(T)(opts);
         case "mode": 
-            return new Mode!(T)();
+            return new Mode!(T)(opts);
         case "stddev": 
-            return new Stddev!(T)();
+            return new Stddev!(T)(opts);
         case "range": 
-            return new Range!(T)();
+            return new Range!(T)(opts);
     }
     assert(0);
 }

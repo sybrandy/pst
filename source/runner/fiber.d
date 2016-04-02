@@ -1,7 +1,7 @@
 module runner.fiber;
 
 import std.range.primitives, core.thread, std.functional, std.array, std.stdio;
-import stats, runner;
+import stats, runner, common.options;
 
 version(unittest)
 {
@@ -14,10 +14,16 @@ class FiberRunner(T): Runner!(T)
     bool isDone = false;
     T currValue;
     string[] output;
+    Options currOpts;
+
+    this(Options opts)
+    {
+        currOpts = opts;
+    }
 
     void addMetric(string name)
     {
-        auto newStat = initStats!(T)(name);
+        auto newStat = initStats!(T)(name, this.currOpts);
         alias partial!(fiberFunc, newStat) newFunc;
         stats ~= new Fiber(&newFunc);
     }
@@ -62,7 +68,8 @@ version(unittest)
     @(1, 2, 5)
     void testAddStat(int numMetrics)
     {
-        FiberRunner!int fr = new FiberRunner!int();
+        Options currOpts;
+        FiberRunner!int fr = new FiberRunner!int(currOpts);
 
         for (int i = 0; i < numMetrics; i++)
         {
@@ -74,7 +81,8 @@ version(unittest)
     @("Test Fiber Mean Only")
     unittest
     {
-        FiberRunner!int fr = new FiberRunner!int();
+        Options currOpts;
+        FiberRunner!int fr = new FiberRunner!int(currOpts);
 
         fr.addMetric("mean");
         fr.put(3);

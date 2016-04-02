@@ -1,7 +1,7 @@
 module stats.mean;
 
 import std.stdio, std.traits, std.math, std.conv, std.format;
-import stats;
+import stats, common.options;
 
 version(unittest)
 {
@@ -30,6 +30,10 @@ class Mean(T) : Stats!(T)
     }
     ulong numVals;
     T result;
+
+    this(Options opts)
+    {
+    }
 
     void add(T val)
     {
@@ -67,7 +71,8 @@ version(unittest)
     @Types!(short, int, long, float, double)
     void testVerySimpleCase(T)()
     {
-        Stats!T mean = initStats!(T)("mean");
+        Options opts;
+        Stats!T mean = initStats!(T)("mean", opts);
         mean.add(1);
         mean.add(1);
         mean.add(1);
@@ -85,7 +90,8 @@ version(unittest)
     @Types!(short, int, long, float, double)
     void testSimpleCase(T)()
     {
-        Stats!T mean = initStats!(T)("MEAN");
+        Options opts;
+        Stats!T mean = initStats!(T)("MEAN", opts);
         mean.add(1);
         mean.add(2);
         mean.add(3);

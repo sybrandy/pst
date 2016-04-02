@@ -1,12 +1,5 @@
 import std.array, std.algorithm, std.getopt, std.stdio, std.string, std.conv;
-import runner, runner.fiber;
-
-struct Options
-{
-    string[] stats;
-    int[] percentiles;
-    int threads;
-}
+import runner, runner.fiber, common.options;
 
 int main(string[] args)
 {
@@ -21,7 +14,7 @@ int main(string[] args)
 
     if (opts.threads == 0)
     {
-        runner = new FiberRunner!(double);
+        runner = new FiberRunner!(double)(Options opts);
     }
     else
     {

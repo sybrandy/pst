@@ -1,7 +1,7 @@
 module stats.count;
 
 import std.stdio, std.conv, std.format;
-import stats;
+import stats, common.options;
 
 version(unittest)
 {
@@ -11,6 +11,10 @@ version(unittest)
 class Count(T) : Stats!(T)
 {
     ulong result;
+
+    this(Options opts)
+    {
+    }
 
     void add(T val)
     {
@@ -32,7 +36,8 @@ version(unittest)
     @(1, 2, 5, 7, 11, 23)
     void testCount(int currLen)
     {
-        Stats!int count = initStats!(int)("count");
+        Options opts;
+        Stats!int count = initStats!(int)("count", opts);
         foreach (i; 0..currLen)
         {
             count.add(1);

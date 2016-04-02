@@ -1,7 +1,7 @@
 module stats.median;
 
 import std.array, std.stdio, std.traits, std.conv, std.format, std.algorithm;
-import stats;
+import stats, common.options;
 
 version(unittest)
 {
@@ -12,6 +12,10 @@ class Median(T) : Stats!(T)
 {
     T[] vals;
     double result;
+
+    this(Options opts)
+    {
+    }
 
     void add(T val)
     {
@@ -43,7 +47,8 @@ version(unittest)
     @Types!(short, int, long, float, double)
     void testOddNumberOfValues(T)()
     {
-        Stats!T median = initStats!(T)("MEDIAN");
+        Options opts;
+        Stats!T median = initStats!(T)("MEDIAN", opts);
         median.add(1);
         median.add(2);
         median.add(3);
@@ -54,7 +59,8 @@ version(unittest)
     @Types!(short, int, long, float, double)
     void testEvenNumberOfValues(T)()
     {
-        Stats!T median = initStats!(T)("MEDIAN");
+        Options opts;
+        Stats!T median = initStats!(T)("MEDIAN", opts);
         median.add(1);
         median.add(2);
         median.add(3);

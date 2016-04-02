@@ -1,7 +1,7 @@
 module stats.range;
 
 import std.stdio, std.conv, std.format, std.traits, std.math, std.algorithm;
-import stats;
+import stats, common.options;
 
 version(unittest)
 {
@@ -28,6 +28,10 @@ class Range(T) : Stats!(T)
                 ulong min, max, result;
             }
         }
+    }
+
+    this(Options opts)
+    {
     }
 
     void add(T val)
@@ -66,7 +70,8 @@ version(unittest)
     @Types!(short, int, long, float, double)
     void testSmallRange(T)()
     {
-        Stats!T range = initStats!(T)("range");
+        Options opts;
+        Stats!T range = initStats!(T)("range", opts);
         range.add(1);
         range.add(1);
         range.add(1);

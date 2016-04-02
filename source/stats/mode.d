@@ -1,7 +1,7 @@
 module stats.mode;
 
 import std.array, std.stdio, std.traits, std.conv, std.format, std.algorithm;
-import stats;
+import stats, common.options;
 
 version(unittest)
 {
@@ -12,6 +12,10 @@ class Mode(T) : Stats!(T)
 {
     T[] vals;
     T result;
+
+    this(Options opts)
+    {
+    }
 
     void add(T val)
     {
@@ -49,7 +53,8 @@ version(unittest)
     @Types!(short, int, long, float, double)
     void testAllONes(T)()
     {
-        Stats!T mode = initStats!(T)("mode");
+        Options opts;
+        Stats!T mode = initStats!(T)("mode", opts);
         mode.add(1);
         mode.add(1);
         mode.add(1);
@@ -67,7 +72,8 @@ version(unittest)
     @Types!(short, int, long, float, double)
     void testTwoValues(T)()
     {
-        Stats!T mode = initStats!(T)("MODE");
+        Options opts;
+        Stats!T mode = initStats!(T)("MODE", opts);
         mode.add(1);
         mode.add(2);
         mode.add(3);

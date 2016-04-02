@@ -1,7 +1,7 @@
 module stats.sum;
 
 import std.stdio, std.conv, std.format, std.traits, std.math;
-import stats;
+import stats, common.options;
 
 version(unittest)
 {
@@ -27,6 +27,10 @@ class Sum(T) : Stats!(T)
                 ulong total;
             }
         }
+    }
+
+    this(Options opts)
+    {
     }
 
     void add(T val)
@@ -64,7 +68,8 @@ version(unittest)
     @Types!(short, int, long, float, double)
     void testSmallNum(T)()
     {
-        Stats!T sum = initStats!(T)("sum");
+        Options opts;
+        Stats!T sum = initStats!(T)("sum", opts);
         sum.add(1);
         sum.add(1);
         sum.add(1);
@@ -82,7 +87,8 @@ version(unittest)
     @Types!(short, int, long, float, double)
     void testLargeNum(T)()
     {
-        Stats!T sum = initStats!(T)("sum");
+        Options opts;
+        Stats!T sum = initStats!(T)("sum", opts);
         sum.add(1);
         sum.add(2);
         sum.add(3);

@@ -1,7 +1,7 @@
 module stats.stddev;
 
 import std.stdio, std.conv, std.format, std.traits, std.math, std.algorithm;
-import stats;
+import stats, common.options;
 
 version(unittest)
 {
@@ -12,6 +12,10 @@ class Stddev(T) : Stats!(T)
 {
     T[] vals;
     double result;
+
+    this(Options opts)
+    {
+    }
 
     void add(T val)
     {
@@ -42,7 +46,8 @@ version(unittest)
     @Types!(short, int, long, float, double)
     void testSmallNum(T)()
     {
-        Stats!T stddev = initStats!(T)("stddev");
+        Options opts;
+        Stats!T stddev = initStats!(T)("stddev", opts);
         stddev.add(1);
         stddev.add(1);
         stddev.add(1);
@@ -53,7 +58,8 @@ version(unittest)
     @Types!(short, int, long, float, double)
     void test8Vals(T)()
     {
-        Stats!T stddev = initStats!(T)("stddev");
+        Options opts;
+        Stats!T stddev = initStats!(T)("stddev", opts);
         stddev.add(2);
         stddev.add(4);
         stddev.add(4);
