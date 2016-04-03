@@ -35,6 +35,15 @@ are used.  By default, the tool will run in a single thread.
 * range
 * percentiles
 
+#### Percentiles vs. Median
+
+Normally, the median and the 50th percentile are the same value.  However, in
+this case, to keep things simple I chose them to be slightly different.
+Median is a true median.  E.g. it is the value that exactly splits the values
+in half.  So, if you have the values 1, 2, 3, and 4, the median is 2.5.
+However, the 50th percentile this will return 3 since 50% of the values will
+be below 3.
+
 ### Examples
 
 #### Get a single statistic

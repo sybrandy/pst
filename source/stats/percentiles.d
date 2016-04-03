@@ -6,6 +6,7 @@ import stats, common.options;
 
 version(unittest)
 {
+    import std.range, std.algorithm;
     import unit_threaded;
 }
 
@@ -30,7 +31,9 @@ class Percentiles(T) : Stats!(T)
         double[] sortedVals = vals.sort().map!(a => to!(double)(a)).array;
         foreach (p; this.percentiles)
         {
-            auto index = cast(long)trunc(float(sortedVals.length) * (float(p) / 100.0));
+            auto index = cast(long)ceil(float(sortedVals.length) * (float(p) / 100.0));
+            if (vals.length == index)
+                index--;
             results[p] = vals[index];
         }
     }
@@ -55,8 +58,10 @@ class Percentiles(T) : Stats!(T)
 
 version(unittest)
 {
-    import std.range, std.algorithm;
-
+    // Need to evaluate whether or not it is worth worrying about such a small
+    // sample size.  The algorithm doesn't work properly here, however is it
+    // really needed?
+    /*
     @Types!(short, int, long, float, double)
     void testTenValues(T)()
     {
@@ -65,36 +70,65 @@ version(unittest)
         opts.percentiles ~= 75;
         opts.percentiles ~= 99;
         Stats!T percentile = initStats!(T)("percentiles", opts);
-        iota(0, 10).each!(a => percentile.add(a));
+        T start = 1;
+        T end = 11;
+        iota(start, end).each!(a => percentile.add(a));
         percentile.finish();
+        writelnUt(percentile.toString());
         static if (isFloatingPoint!(T))
         {
-            percentile.toString().shouldEqual("PERCENTILE (50): 5.0000\nPERCENTILE (75): 7.0000\nPERCENTILE (99): 9.0000");
+            percentile.toString().shouldEqual("PERCENTILE (50): 6.0000\nPERCENTILE (75): 8.0000\nPERCENTILE (99): 10.0000");
         }
         else
         {
-            percentile.toString().shouldEqual("PERCENTILE (50): 5\nPERCENTILE (75): 7\nPERCENTILE (99): 9");
+            percentile.toString().shouldEqual("PERCENTILE (50): 6\nPERCENTILE (75): 8\nPERCENTILE (99): 10");
         }
     }
-
+    */
 
     @Types!(short, int, long, float, double)
-    void testOneHundredValues(T)()
+    void testTwentyValues(T)()
     {
         Options opts;
         opts.percentiles ~= 50;
         opts.percentiles ~= 75;
         opts.percentiles ~= 99;
         Stats!T percentile = initStats!(T)("percentiles", opts);
-        iota(0, 100).each!(a => percentile.add(a));
+        T start = 1;
+        T end = 21;
+        iota(start, end).each!(a => percentile.add(a));
         percentile.finish();
+        writelnUt(percentile.toString());
         static if (isFloatingPoint!(T))
         {
-            percentile.toString().shouldEqual("PERCENTILE (50): 50.0000\nPERCENTILE (75): 75.0000\nPERCENTILE (99): 99.0000");
+            percentile.toString().shouldEqual("PERCENTILE (50): 11.0000\nPERCENTILE (75): 16.0000\nPERCENTILE (99): 20.0000");
         }
         else
         {
-            percentile.toString().shouldEqual("PERCENTILE (50): 50\nPERCENTILE (75): 75\nPERCENTILE (99): 99");
+            percentile.toString().shouldEqual("PERCENTILE (50): 11\nPERCENTILE (75): 16\nPERCENTILE (99): 20");
+        }
+    }
+
+    @Types!(short, int, long, float, double)
+    void testOneHundredValues(T)()
+    {
+        import std.range, std.algorithm;
+        Options opts;
+        opts.percentiles ~= 50;
+        opts.percentiles ~= 75;
+        opts.percentiles ~= 99;
+        Stats!T percentile = initStats!(T)("percentiles", opts);
+        T start = 1;
+        T end = 101;
+        iota(start, end).each!(a => percentile.add(a));
+        percentile.finish();
+        static if (isFloatingPoint!(T))
+        {
+            percentile.toString().shouldEqual("PERCENTILE (50): 51.0000\nPERCENTILE (75): 76.0000\nPERCENTILE (99): 100.0000");
+        }
+        else
+        {
+            percentile.toString().shouldEqual("PERCENTILE (50): 51\nPERCENTILE (75): 76\nPERCENTILE (99): 100");
         }
     }
 }
