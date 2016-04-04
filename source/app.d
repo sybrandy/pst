@@ -8,13 +8,12 @@ int main(string[] args)
 
     if (opts.stats.length == 0)
     {
-        writeln("You must specify at least one stat to calculate.");
         return 1;
     }
 
     if (opts.threads == 0)
     {
-        runner = new FiberRunner!(double)(Options opts);
+        runner = new FiberRunner!(double)(opts);
     }
     else
     {
@@ -64,15 +63,28 @@ Options getOptions(string[] args)
         "threads|t", "The number of worker threads to use", &threads
     );
 
-    currOptions.stats = stats.split(",");
-    currOptions.percentiles = percentiles.split(",").map!(to!int).array();
-    currOptions.threads = threads;
-
     if (help.helpWanted)
     {
         defaultGetoptPrinter("pst - Pipable Statistics", help.options);
         writeln("Supported statistical measures: ", supportedStats.keys);
+        return currOptions;
     }
+
+    auto splitStats = stats.split(",");
+    if (splitStats.length == 0)
+    {
+        writeln("You must specify at least one stat to calculate.");
+        return currOptions;
+    }
+    if (threads < splitStats.length)
+    {
+        writeln("You must specify at least as many threads as there are stats.");
+        return currOptions;
+    }
+
+    currOptions.stats = splitStats;
+    currOptions.percentiles = percentiles.split(",").map!(to!int).array();
+    currOptions.threads = threads;
 
     return currOptions;
 }
